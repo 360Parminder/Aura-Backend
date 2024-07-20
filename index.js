@@ -16,6 +16,7 @@ connectDB();
 // Routes
 app.use('/', require('./src/routes/userRoutes.js'));
 app.use('/', require('./src/routes/playList.js'));
+app.use('/', require('./src/routes/Video.js'));
 // app.use('/api', require('./src/routes/transactionRoutes'));
 
 // Define PORT from environment or default to 5000
