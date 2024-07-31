@@ -23,11 +23,6 @@ const userSchema = new mongoose.Schema({
     enum: ['admin', 'user'],
     default: 'user',
   },
-  accessToken: {
-    type: String,
-    default: ''
-
-  },
   refreshToken: {
     type: String,
     default: ''
