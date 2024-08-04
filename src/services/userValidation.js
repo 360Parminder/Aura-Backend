@@ -74,7 +74,7 @@ const signInUser = async (req, res) => {
     res.cookie('accessToken', accessToken, {
       httpOnly: true,
       secure: true,
-      maxAge: 30 * 24 * 60 * 60 * 1000,
+      maxAge: 60 * 1000,
     });
 
     return {
