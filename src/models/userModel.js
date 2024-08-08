@@ -23,6 +23,18 @@ const userSchema = new mongoose.Schema({
     enum: ['admin', 'user'],
     default: 'user',
   },
+  currentWatching: {
+    type: Array,
+    default: []
+  },
+  watchedVideos: {
+    type: Array,
+    default: []
+  },
+  watchLater: {
+    type: Array,
+    default: []
+  },
   refreshToken: {
     type: String,
     default: ''
