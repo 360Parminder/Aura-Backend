@@ -25,6 +25,7 @@ connectDB();
 app.use('/', require('./src/routes/userRoutes.js'));
 app.use('/', require('./src/routes/playList.js'));
 app.use('/', require('./src/routes/Video.js'));
+app.use('/',require('./src/routes/show.js'))
 // app.use('/api', require('./src/routes/transactionRoutes'));
 
 // Define PORT from environment or default to 5000
@@ -32,5 +33,5 @@ const PORT = process.env.PORT || 5000;
 
 // Start the server
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+  console.log(`Server is running on http://localhost:${PORT}`);
 });
