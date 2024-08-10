@@ -1,4 +1,5 @@
 
+
 const fetchShowDetails= async(req,res)=>{
     const {videoname}= req.params;
 
@@ -21,6 +22,16 @@ try {
     
 
 }
+}
+
+const fetchContent= async(req,res)=>{
+
+  try {
+    
+  } catch (error) {
+    
+  }
+
 }
 
 module.exports={
