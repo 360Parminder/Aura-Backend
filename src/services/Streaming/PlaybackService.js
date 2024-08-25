@@ -1,0 +1,1 @@
+// Tracks playback data, user preferences (e.g., subtitles, playback speed), and resume points.

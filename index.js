@@ -1,31 +1,34 @@
-require('dotenv').config();
+require('dotenv').config(); // Load environment variables
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const connectDB = require('./src/db/database');
 const app = express();
 
-// Middleware
-app.use(bodyParser.json()); // Parse JSON bodies
-app.use(bodyParser.urlencoded({ extended: true })); // Parse URL-encoded bodies
-// app.use(cors()); // Enable CORS
-const corsOptions = {
-  origin: ["https://theslug.netlify.app","http://localhost:5173"], // Allow requests from example1.com and example2.com
-  methods: 'GET,POST', // Allow only GET and POST requests
-    credentials: true,
-  allowedHeaders: 'Content-Type,Authorization', // Allow only specific headers
-};
-// Handle CORS preflight requests
-app.options('*', cors(corsOptions));
-app.use(cors(corsOptions));
+// Middleware for parsing request bodies
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+// Correct CORS configuration to handle all requests
+app.use(cors({
+  origin: 'http://localhost:3000', // Allow requests from this origin
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE', // Allowed HTTP methods
+  allowedHeaders: 'Content-Type,Authorization', // Allowed headers
+  credentials: true // Allow credentials (cookies, authorization headers, etc.)
+}));
+
 // Connect to the database
 connectDB();
 
 // Routes
+app.use('/', require('./src/routes/userAuthRoutes.js'));
+app.use('/', require('./src/routes/adminAuthRoutes.js'));
 app.use('/', require('./src/routes/userRoutes.js'));
-app.use('/', require('./src/routes/playList.js'));
-app.use('/', require('./src/routes/Video.js'));
-app.use('/',require('./src/routes/show.js'))
+
+// Additional routes can be uncommented as needed
+// app.use('/', require('./src/routes/playList.js'));
+// app.use('/', require('./src/routes/Video.js'));
+// app.use('/',require('./src/routes/show.js'));
 // app.use('/api', require('./src/routes/transactionRoutes'));
 
 // Define PORT from environment or default to 5000

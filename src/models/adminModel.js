@@ -1,15 +1,15 @@
 const mongoose = require('mongoose');
 
-const userSchema = new mongoose.Schema({
+const adminSchema = new mongoose.Schema({
 
   // userId: {
   //   type: String,
   //   required: true
   // },
-  avatar:{
-    type:String,
-    required:true
-  },
+//   avatar:{
+//     type:String,
+//     required:true
+//   },
   firstName: {
     type: String,
     required: true,
@@ -27,26 +27,10 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  inviteEmails:{
-    type:Array,
-    default:[]
-  },
   role: {
     type: String,
-    enum: ['admin', 'user'],
-    default: 'user',
-  },
-  currentWatching: {
-    type: Array,
-    default: []
-  },
-  watchedVideos: {
-    type: Array,
-    default: []
-  },
-  watchLater: {
-    type: Array,
-    default: []
+    enum: ['admin'],
+    default: 'admin',
   },
   refreshToken: {
     type: String,
@@ -54,6 +38,6 @@ const userSchema = new mongoose.Schema({
   }
 });
 
-const User = mongoose.model('User', userSchema);
+const Admin = mongoose.model('Admin', adminSchema);
 
-module.exports = User;
+module.exports = Admin;

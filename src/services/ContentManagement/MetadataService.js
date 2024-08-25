@@ -1,0 +1,1 @@
+// Manages metadata for content (ratings, reviews, tags, etc.).

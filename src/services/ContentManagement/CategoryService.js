@@ -1,0 +1,1 @@
+// Manages categories or genres for content.
