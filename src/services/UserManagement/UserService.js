@@ -10,19 +10,27 @@ const generateTokens = require('../../utils/generateTokens')
 
 
 const profileUser = async (req, res) => {
-    console.log(req.cookies.accessToken);
+    // console.log(req.query.accessToken);
     
 
-    const accessToken = req.cookies.accessToken || req.params.accessToken
+    const accessToken = req.query.accessToken;
+    // console.log(accessToken);
+    
     try {
 
         if (!accessToken) {
-            return res.json({ message: "Unauthorized" });
+            return{ 
+                success:false,
+                message: "Unauthorized"
+             };
         }
         const decoded = jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET);
         const user = await User.findById(decoded.id);
         if (!user) {
-            return res.json({ message: "User not found" })
+            return{
+                success:false,
+                message: "User not found"
+            } 
         }
         return{
             success:true,
@@ -48,11 +56,15 @@ const profileUser = async (req, res) => {
 
 const passwordUpdateUser= async (req,res)=>{
     const {currentPassword,newPassword}= req.body
-    const accessToken = req.cookies.accessToken
+    const accessToken = req.query.accessToken
 
     try {
         if (!accessToken) {
-            return res.json({message:"Unauthorized"})
+            return{
+                success:false,
+                message: "Unauthorized",
+                status: 401
+            }
         }
         const decoded = jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET);
         const user = await User.findById(decoded.id);

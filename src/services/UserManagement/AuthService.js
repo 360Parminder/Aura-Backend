@@ -32,6 +32,7 @@ const registerUser = async (req, res) => {
       if (user) {
         return {
           status: 201,
+          message:"User Registered",
           _id: user._id,
           name: user.name,
           email: user.email,

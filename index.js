@@ -8,6 +8,7 @@ const app = express();
 // Middleware for parsing request bodies
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: true }));
 
 // Correct CORS configuration to handle all requests
 app.use(cors({
@@ -24,6 +25,8 @@ connectDB();
 app.use('/', require('./src/routes/userAuthRoutes.js'));
 app.use('/', require('./src/routes/adminAuthRoutes.js'));
 app.use('/', require('./src/routes/userRoutes.js'));
+app.use('/', require('./src/routes/MediaRoutes.js'));
+
 
 // Additional routes can be uncommented as needed
 // app.use('/', require('./src/routes/playList.js'));

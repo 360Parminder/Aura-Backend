@@ -2,8 +2,11 @@ const { profileUser } = require("../services/UserManagement/UserService");
 
 
 
-const ProfileUser = async (req, res) => {
-    console.log("data from controller",req.cookies);
+const ProfileUser = async (req,res) => {
+
+    // console.log("data from controller",req);
+    // console.log("data from controller",req.cookies);
+    // console.log("data from controller",req.query);
     try {
       const data = await profileUser(req,res)
       if (data.success) {
