@@ -14,67 +14,101 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 
 
 const uploadVideo = async (req, res) => {
-    const videoName = req.body.videoName;
-    const videoPath = req.file.path; // path to the uploaded file
-    const bucketName = "videos";
-    const chunkSize = 5 * 1024 * 1024; // 5MB chunk size
-  
-    console.log(`Starting upload for ${videoName}`);
-  
-    const fileStream = fs.createReadStream(videoPath, { highWaterMark: chunkSize });
-    let chunkIndex = 0;
-  
-    for await (const chunk of fileStream) {
-      const { error } = await supabase
-        .storage
-        .from(bucketName)
-        .upload(`${videoName}/chunk_${chunkIndex}`, chunk, {
-          cacheControl: '3600',
-          upsert: false,
-          contentType: 'video/mp4',
-        });
-  
-      if (error) {
-        console.error('Error uploading chunk:', error.message);
-        res.status(500).send(`Error uploading chunk ${chunkIndex}: ${error.message}`);
-        return;
-      }
-  
-      console.log(`Uploaded chunk ${chunkIndex}`);
-      chunkIndex++;
+  const videoName = req.body.videoName;
+  const videoPath = req.file.path; // path to the uploaded file
+
+  if (!videoName && videoPath) {
+    return {
+      success: false,
+      message: "Provide both Video Name & Video File"
     }
-  
-    console.log('Video upload completed.');
-    res.status(200).send('Video upload completed.');
-  };
-
- const downloadVideo =async()=>{
-    try {
-    // const { videoName, chunkIndex } = req.params;
-
-  // Fetch chunk from Supabase
-  const videoName="testvideo"
-  chunkIndex=2
-  const { data, error } = await supabase
-    .storage
-    .from('videos')
-    .download(`${videoName}/chunk_${chunkIndex}`);
-
-  if (error) {
-    res.status(500).send('Error retrieving chunk');
-    return;
   }
-  console.log(data);
-  
-    } catch (error) {
-        
+  const bucketName = "videos";
+  const chunkSize = 5 * 1024 * 1024; // 5MB chunk size
+
+  // console.log(`Starting upload for ${videoName}`);
+
+  const fileStream = fs.createReadStream(videoPath, { highWaterMark: chunkSize });
+  let chunkIndex = 0;
+
+  for await (const chunk of fileStream) {
+    const { error } = await supabase
+      .storage
+      .from(bucketName)
+      .upload(`${videoName}/chunk_${chunkIndex}`, chunk, {
+        cacheControl: '3600',
+        upsert: false,
+        contentType: 'video/mp4',
+      });
+
+    if (error) {
+      console.error('Error uploading chunk:', error.message);
+      return {
+        success: false,
+        message: error.message
+      }
     }
- } 
+
+    console.log(`Uploaded chunk ${chunkIndex}`);
+    chunkIndex++;
+  }
+
+  console.log('Video upload completed.');
+  return {
+    success: true,
+    message: "Video upload completed"
+  }
+};
+
+const downloadVideo = async (req,res) => {
+  try {
+    const { videoName, chunkIndex } = req.query;
+    console.log(videoName,chunkIndex);
+    
+    // const videoName ="testvideo"
+    // const chunkIndex=0
+
+    if (!videoName && chunkIndex) {
+      return {
+        success: false,
+        message: 'provide Video Name & Video index'
+      }
+    }
+    const { data, error } = await supabase
+      .storage
+      .from('videos')
+      .download(`${videoName}/chunk_${chunkIndex}`);
+
+    if (error) {
+      return {
+        success: false,
+        message: "Error retrieving chunk",
+        error:error
+      }
+    }
+    // console.log(data);
+    res.setHeader('Content-Type', 'video/mp4');
+    res.send({
+      data,
+      success:true
+    })
+    // return {
+    //   success: true,
+    //   message: "File downloaded Successfully",
+    // }
+
+  } catch (error) {
+    return {
+      success: false,
+      message: error.message
+    }
+  }
+}
 
 // Usage
 // uploadVideoInChunks('path/to/your/video.mp4', 'your-bucket-name', 'video-name');
 
-module.exports={
-    uploadVideo,
-    downloadVideo
+module.exports = {
+  uploadVideo,
+  downloadVideo
 }

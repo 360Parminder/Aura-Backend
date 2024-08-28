@@ -19,7 +19,7 @@ const UploadVideo = async(req,res)=>{
 const DownloadVideo = async(req,res)=>{
     try {
         const data= await downloadVideo(req,res)
-        if (data) {
+        if (data.success) {
             res.status(200).json(data)
         }
         else{
