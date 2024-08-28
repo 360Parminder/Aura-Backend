@@ -2,6 +2,7 @@
 
 const fs = require('fs');
 const { createClient } = require('@supabase/supabase-js');
+const content = require('../../models/content')
 
 // Initialize Supabase client
 const supabaseUrl = 'https://ddssnypwehbglifwwlcs.supabase.co/';
@@ -13,18 +14,47 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 
 
 
-const uploadVideo = async (req, res) => {
-  const videoName = req.body.videoName;
+const uploadContent = async (req, res) => {
   const videoPath = req.file.path; // path to the uploaded file
+  const { title, description, genre, releaseDate, cast, videoUrl, thumbnailUrl, type, season, episode, duration } = req.body
 
-  if (!videoName && videoPath) {
+  if (!title && videoPath) {
     return {
       success: false,
       message: "Provide both Video Name & Video File"
     }
   }
+
+  const videoExists = await content.findOne({ title })
+  if (videoExists) {
+    return {
+      success: false,
+      message: "Video already exists"
+    }
+  }
+  const Content = await content.create({
+    title,
+    description,
+    genre,
+    releaseDate,
+    cast,
+    videoUrl,
+    thumbnailUrl,
+    type,
+    season,
+    episode,
+    duration
+  })
+  
+  if (!Content) {
+    return {
+      success: false,
+      message: 'unable to upload video'
+    }
+  }
+
   const bucketName = "videos";
-  const chunkSize = 5 * 1024 * 1024; // 5MB chunk size
+  const chunkSize = 10 * 1024 * 1024; // 5MB chunk size
 
   // console.log(`Starting upload for ${videoName}`);
 
@@ -35,13 +65,14 @@ const uploadVideo = async (req, res) => {
     const { error } = await supabase
       .storage
       .from(bucketName)
-      .upload(`${videoName}/chunk_${chunkIndex}`, chunk, {
+      .upload(`${title}/chunk_${chunkIndex}`, chunk, {
         cacheControl: '3600',
         upsert: false,
         contentType: 'video/mp4',
       });
 
     if (error) {
+      const contentDeleted = content.findOneAndDelete({title})
       console.error('Error uploading chunk:', error.message);
       return {
         success: false,
@@ -52,19 +83,28 @@ const uploadVideo = async (req, res) => {
     console.log(`Uploaded chunk ${chunkIndex}`);
     chunkIndex++;
   }
+  const totalChunks = chunkIndex
+  const video = await content.findOneAndUpdate({ title }, { totalChunks: totalChunks })
+  if (!video) {
 
+    return {
+      success: false,
+      message: 'Video not found'
+    }
+  }
   console.log('Video upload completed.');
   return {
     success: true,
-    message: "Video upload completed"
+    message: "Video upload completed",
+    totalChunks
   }
 };
 
-const downloadVideo = async (req,res) => {
+const downloadVideo = async (req, res) => {
   try {
     const { videoName, chunkIndex } = req.query;
-    console.log(videoName,chunkIndex);
-    
+    // console.log(videoName,chunkIndex);
+
     // const videoName ="testvideo"
     // const chunkIndex=0
 
@@ -83,16 +123,19 @@ const downloadVideo = async (req,res) => {
       return {
         success: false,
         message: "Error retrieving chunk",
-        error:error
+        error: error
       }
     }
     // console.log(data);
     res.setHeader('Content-Type', 'video/mp4');
     res.send({
       data,
-      success:true
+      success: true
     })
+    console.log(data);
+
     // return {
+    //   data,
     //   success: true,
     //   message: "File downloaded Successfully",
     // }
@@ -109,6 +152,6 @@ const downloadVideo = async (req,res) => {
 // uploadVideoInChunks('path/to/your/video.mp4', 'your-bucket-name', 'video-name');
 
 module.exports = {
-  uploadVideo,
+  uploadContent,
   downloadVideo
 }

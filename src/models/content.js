@@ -15,7 +15,7 @@ const contentSchema  = new mongoose.Schema({
   },
   releaseDate: {
     type: Date,
-    required: true,
+    // required: true,
   },
   rating: {
     type: Number, // e.g., 8.5/10
@@ -25,19 +25,19 @@ const contentSchema  = new mongoose.Schema({
   },
   cast: {
     type: [String], // Array of actor names
-    required: true,
+    // required: true,
   },
   videoUrl: {
     type: String, // URL to the video file (could be on S3, Firebase, etc.)
-    required: true,
+    // required: true,
   },
   thumbnailUrl: {
     type: String, // URL to the thumbnail image
-    required: true,
+    // required: true,
   },
   type: {
     type: String, // 'movie' or 'show'
-    required: true,
+    // required: true,
   },
   season: {
     type: Number, // Only for TV shows
@@ -47,7 +47,7 @@ const contentSchema  = new mongoose.Schema({
   },
   duration: {
     type: String, // Duration of content (e.g., "2h 30m")
-    required: true,
+    // required: true,
   },
   createdAt: {
     type: Date,
@@ -57,6 +57,10 @@ const contentSchema  = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  totalChunks:{
+    type:Number,
+    default:0
+  }
 });
 
 

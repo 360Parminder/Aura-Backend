@@ -1,11 +1,11 @@
-const { uploadVideo, downloadVideo } = require("../services/FileandMediaManagement/MediaService")
+const { downloadVideo, uploadContent } = require("../services/FileandMediaManagement/MediaService")
 
 
-const UploadVideo = async(req,res)=>{
-    console.log(req.body);
+const UploadContent = async(req,res)=>{
+    // console.log(req.body);
     
     try {
-        const data = await uploadVideo(req,res)
+        const data = await uploadContent(req,res)
         if (data.success) {
             res.status(200).json(data)
         }
@@ -30,6 +30,6 @@ const DownloadVideo = async(req,res)=>{
     }
 }
 module.exports={
-    UploadVideo,
+    UploadContent,
     DownloadVideo
 }
