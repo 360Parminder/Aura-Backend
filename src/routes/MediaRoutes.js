@@ -6,6 +6,6 @@ const router= express.Router()
 
 
 router.post('/uploadVideo', upload.single('videoFile'), UploadVideo);
-router.get('/downloadVideo', DownloadVideo);
+router.post('/downloadVideo', DownloadVideo);
 
 module.exports= router
