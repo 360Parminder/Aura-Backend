@@ -7,13 +7,15 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+
 node_modules
 uploads
 /y
-/.env
 dist
 dist-ssr
 *.local
+text.txt
+.env
 
 # Editor directories and files
 .vscode/*
