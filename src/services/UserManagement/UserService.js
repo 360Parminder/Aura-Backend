@@ -10,11 +10,9 @@ const generateTokens = require('../../utils/generateTokens')
 
 
 const profileUser = async (req, res) => {
-    // console.log(req.query.accessToken);
-    
-
-    const accessToken = req.query.accessToken;
-    // console.log(accessToken);
+    console.log(req.cookies);
+    const accessToken =req.cookie.accessToken||req.query
+    // console.log(accessToken,"accesstoken");
     
     try {
 

@@ -1,8 +1,14 @@
 const { downloadVideo, uploadContent } = require("../services/FileandMediaManagement/MediaService")
 
 
+
 const UploadContent = async(req,res)=>{
-    // console.log(req.body);
+
+    console.log(req.body);
+
+    console.log(req.body);
+    
+
     
     try {
         const data = await uploadContent(req,res)

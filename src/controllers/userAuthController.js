@@ -1,5 +1,5 @@
 const {signInUser,refreshAccessToken} = require('../services/userValidation');
-const { registerUser,loginUser } = require('../services/UserManagement/AuthService');
+const { registerUser,loginUser,googleLogin } = require('../services/UserManagement/AuthService');
 
 const LoginUser = async (req, res) => {
   // console.log("data from controller",req.body);
@@ -22,6 +22,20 @@ const RegisterUser = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+const GoogleLogin = async (req, res) => {
+  // console.log("body from controller",req.body);
+  try {
+    const data = await googleLogin(req,res);
+    if (data.success) {
+      res.status(200).json(data);
+    }
+    else{
+      res.status(400).json(data);
+    }
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
 
 const RefreshAccessToken= async(req,res)=>{
   try {
@@ -36,5 +50,6 @@ const RefreshAccessToken= async(req,res)=>{
 module.exports = {
   LoginUser,
   RegisterUser,
+  GoogleLogin,
   RefreshAccessToken
 };

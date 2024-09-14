@@ -16,7 +16,7 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 
 const uploadContent = async (req, res) => {
   const videoPath = req.file.path; // path to the uploaded file
-  const { title, description, genre, releaseDate, cast, videoUrl, thumbnailUrl, type, season, episode, duration } = req.body
+  const { title, description, genre, releaseDate, cast ,videoUrl, thumbnailUrl, type, season, episode, duration } = req.body;
 
   if (!title && videoPath) {
     return {

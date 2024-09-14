@@ -101,6 +101,7 @@ const loginUser = async (req, res) => {
   
       return {
         status: 200,
+        success:true,
         message: "User Signed In Successfully",
         user: {
           id: user._id,
@@ -110,7 +111,6 @@ const loginUser = async (req, res) => {
           role: user.role,
         },
         accessToken,
-        refreshToken,
       }
   
     }
@@ -123,7 +123,68 @@ const loginUser = async (req, res) => {
     }
   }
 
+
+const googleLogin = async (req, res) => {
+    try {
+      const { email,picture,given_name,family_name,sub } = req.body
+      const user = await User.findOne({ email });
+      if (!user) {
+        const user = await User.create({
+          avatar:picture,
+          firstName:given_name,
+          lastName:family_name,
+          email,
+          password:sub,
+          role:"user"
+        });
+        const {refreshToken, accessToken} = await generateTokens(user);
+        res.cookie('accessToken', accessToken, {
+          // httpOnly: true,
+          // secure: true,
+          maxAge: 60 * 1000,
+        });
+        return {
+          status: 200,
+          success:true,
+          message:"User Registered",
+          _id: user._id,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          email: user.email,
+          accessToken
+        };
+      }
+
+        const {refreshToken, accessToken} = await generateTokens(user);
+        res.cookie('accessToken', accessToken, {
+          // httpOnly: true,
+          // secure: true,
+          maxAge: 60 * 1000,
+        });
+        return {
+          status: 201,
+          success:true,
+          message:"User already exists",
+          _id: user._id,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          email: user.email,
+          accessToken, 
+        };
+   
+        
+    } catch (error) {
+      console.log("uservali", error);
+      return {
+        status: 400,
+        success:false,
+        message: error.message
+      }
+    }
+   
+  }
   module.exports = {
     registerUser,
     loginUser,
+    googleLogin
   }
