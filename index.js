@@ -41,7 +41,7 @@ app.options('*', cors(corsOptions));
 
 // Routes
 app.use("/root", (req, res) => {
-  res.send('API Monitoring Backend');
+  res.send('Aura Videos Backend');
 });
 app.use('/', require('./src/routes/userAuthRoutes.js'));
 app.use('/', require('./src/routes/adminAuthRoutes.js'));
