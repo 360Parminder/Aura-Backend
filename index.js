@@ -7,21 +7,41 @@ const app = express();
 const cookieParser = require('cookie-parser');
 
 // Middleware for parsing request bodies
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
+const allowedOrigins = [
+  "http://localhost:3000",
+  "https://auravideos.vercel.app"
+ 
+];
 // Correct CORS configuration to handle all requests
-app.use(cors({
-  "origin": ["*"],
-  "method": ["GET", "POST", "PUT", "DELETE"],
-  "responseHeader": ["Content-Type", "Authorization"],
-  credentials: true // Allow credentials (cookies, authorization headers, etc.)
-}));
+const corsOptions = {
+  origin: function (origin, callback) {
+    console.log('Requested Origin:', origin);
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true,
+  allowedHeaders: ['Content-Type', 'Authorization']
+};
+
+// Enable CORS
+app.use(cors(corsOptions));
+
+// CORS preflight
+app.options('*', cors(corsOptions));
 
 
 // Routes
+app.use("/root", (req, res) => {
+  res.send('API Monitoring Backend');
+});
 app.use('/', require('./src/routes/userAuthRoutes.js'));
 app.use('/', require('./src/routes/adminAuthRoutes.js'));
 app.use('/', require('./src/routes/userRoutes.js'));
