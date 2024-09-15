@@ -138,10 +138,13 @@ const googleLogin = async (req, res) => {
           role:"user"
         });
         const {refreshToken, accessToken} = await generateTokens(user);
-        res.cookie('accessToken', accessToken, {
+        res.cookie('accessToken', accessToken,
+          {
           // httpOnly: true,
           // secure: true,
+          sameSite: 'none',
           maxAge:60 * 60 * 1000,
+        
         });
         return {
           status: 200,
@@ -159,6 +162,7 @@ const googleLogin = async (req, res) => {
         res.cookie('accessToken', accessToken, {
           // httpOnly: true,
           // secure: true,
+          sameSite: 'none',
           maxAge:60 * 60 * 1000,
         });
         return {
