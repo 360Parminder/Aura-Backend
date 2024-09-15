@@ -14,14 +14,12 @@ app.use(cookieParser());
 
 // Correct CORS configuration to handle all requests
 app.use(cors({
-  origin: 'http://localhost:3000', // Allow requests from this origin
-  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE', // Allowed HTTP methods
-  allowedHeaders: 'Content-Type,Authorization', // Allowed headers
+  "origin": ["*"],
+  "method": ["GET", "POST", "PUT", "DELETE"],
+  "responseHeader": ["Content-Type", "Authorization"],
   credentials: true // Allow credentials (cookies, authorization headers, etc.)
 }));
 
-// Connect to the database
-connectDB();
 
 // Routes
 app.use('/', require('./src/routes/userAuthRoutes.js'));
@@ -35,6 +33,9 @@ app.use('/', require('./src/routes/MediaRoutes.js'));
 // app.use('/', require('./src/routes/Video.js'));
 // app.use('/',require('./src/routes/show.js'));
 // app.use('/api', require('./src/routes/transactionRoutes'));
+
+// Connect to the database
+connectDB();
 
 // Define PORT from environment or default to 5000
 const PORT = process.env.PORT || 5000;
