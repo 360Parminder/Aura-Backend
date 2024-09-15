@@ -13,7 +13,8 @@ app.use(cookieParser());
 
 const allowedOrigins = [
   "http://localhost:3000",
-  "https://auravideos.vercel.app"
+  "https://auravideos.vercel.app",
+  "https://auravideos.netlify.app",
  
 ];
 // Correct CORS configuration to handle all requests
