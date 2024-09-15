@@ -12,7 +12,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // Correct CORS configuration to handle all requests
 app.use(cors({
-  origin: 'http://localhost:3000', // Allow requests from this origin
+  origin: 'http://localhost:3000,https://auravideos.vercel.app/', // Allow requests from this origin
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE', // Allowed HTTP methods
   allowedHeaders: 'Content-Type,Authorization', // Allowed headers
   credentials: true // Allow credentials (cookies, authorization headers, etc.)
