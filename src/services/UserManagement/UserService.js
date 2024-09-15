@@ -12,7 +12,7 @@ const generateTokens = require('../../utils/generateTokens')
 const profileUser = async (req,res) => {
     // console.log("req",req);
     // console.log("cookie",req.cookie);
-    // console.log("cookies",req.Cookie);
+    // console.log("cookies",req.cookies.accessToken);
     // console.log("query",req.query.accessToken);
     
     
