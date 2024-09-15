@@ -138,14 +138,13 @@ const googleLogin = async (req, res) => {
           role:"user"
         });
         const {refreshToken, accessToken} = await generateTokens(user);
-        res.cookie('accessToken', accessToken,
-          {
-          // httpOnly: true,
-          // secure: true,
-          sameSite: 'none',
-          maxAge:60 * 60 * 1000,
-        
+        res.cookie('accessToken', accessToken, {
+          // httpOnly: true,    // Set to true for security if you want it accessible only by the server
+          secure: true,      // Set to true if your site is served over HTTPS
+          sameSite: 'None',  // Correctly set SameSite to 'None', 'Lax', or 'Strict'
+          maxAge: 60 * 60 * 1000 // 1 hour
         });
+        
         return {
           status: 200,
           success:true,
@@ -160,10 +159,10 @@ const googleLogin = async (req, res) => {
 
         const {refreshToken, accessToken} = await generateTokens(user);
         res.cookie('accessToken', accessToken, {
-          // httpOnly: true,
-          // secure: true,
-          sameSite: 'none',
-          maxAge:60 * 60 * 1000,
+          // httpOnly: true,    // Set to true for security if you want it accessible only by the server
+          secure: true,      // Set to true if your site is served over HTTPS
+          sameSite: 'None',  // Correctly set SameSite to 'None', 'Lax', or 'Strict'
+          maxAge: 60 * 60 * 1000 // 1 hour
         });
         return {
           status: 201,
